@@ -12,7 +12,7 @@ public class Main {
         System.out.print("Enter second number: ");
         double num2 = scanner.nextDouble();
 
-        System..println("Choose an operation:");
+        System.out.println("Choose an operation:");
         System.out.println("1. Addition (+)");
         System.out.println("2. Subtraction (-)");
         System.out.println("3. Multiplication (*)");
