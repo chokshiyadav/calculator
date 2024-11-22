@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+    stages {
+        stage('Stage 1: Git Clone') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/chokshiyadav/calculator.git'
+            }
+        }
+        stage('Stage 2: Maven Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('Stage 3: Build Docker Image') {
+            steps {
+                script {
+                    // Declare docker_image variable here
+                    docker_image = docker.build("chokshi/calculator:latest")
+                }
+            }
+        }
+        stage('Stage 4: Push Docker Image to Hub') {
+            steps {
+                script {
+                    docker.withRegistry('', 'DockerHubCred') {
+                        docker_image.push()
+                    }
+                }
+            }
+        }
+        stage('Stage 5: Clean Docker Images'){
+            steps{
+                script{
+                    sh 'docker container prune -f'
+                    sh 'docker image prune -f'
+                }
+            }
+        }
+        stage('Step 6: Ansible Deployment') {
+            steps {
+                ansiblePlaybook(
+                    colorized: true,
+                    credentialsId: 'localhost',
+                    disableHostKeyChecking: true,
+                    installation: 'Ansible',
+                    inventory: 'Deployment/inventory',
+                    playbook: 'Deployment/deploy.yml',
+                    sudoUser: null
+                )
+            }
+        }
+    }
+}
