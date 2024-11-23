@@ -18,7 +18,7 @@ public class Main {
         double num2 = scanner.nextDouble();
 
         System.out.println("Choose an operation:");
-        System.out.println("1. Addition (+)");
+        System.out.println("1. Add (+)");
         System.out.println("2. Subtraction (-)");
         System.out.println("3. Multiplication (*)");
         System.out.println("4. Division (/)");
